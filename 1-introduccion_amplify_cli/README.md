@@ -1,5 +1,5 @@
 # Introduccion a FullStack Serverless con Amplify
-
+Nota: Antes de iniciar se debe tener instalado node y npm `https://nodejs.org/es/download/`
 ## 1) Instalando y configurando amplify CLI
 
 ```

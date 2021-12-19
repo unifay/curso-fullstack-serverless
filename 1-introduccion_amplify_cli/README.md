@@ -23,17 +23,33 @@ Una vez se ingresa el nombre del usuario se abre por lo general el navegador por
 
 <img src="../1-introduccion_amplify_cli/images/2021-12-01_21-46-42.png">
 
+<br>
+
+Se agrega el accessKeyId desde el CSV que se descargo previamente:
+
+<br>
+
 ## 2) Inicializando la aplicacion
 
 ```
 ~ npx create-react-app amplify-app
 ```
 
-Despues de crear la aplicacion React debemos cambiar al directorio generado
+Es posible que se necesite instalar `create-react-app` Despues de crear la aplicacion React debemos cambiar al directorio generado:
 
 ```
 ~ cd amplify-app
 ```
+
+Adicionalmente podemos ejecutar el siguiente comando para validar que el proyecto funciona correctamente:
+
+```
+~npm start
+```
+<!-- Descomentar la siguientes lineas pero antes se debe redimiencionar la imagen -->
+<!-- `Esto deberia abrir automaticamente el navegador y se deplegara la app similar a esto:` -->
+
+<!-- <img src="../1-introduccion_amplify_cli/images/2021-12-18-22-11-42.png"> -->
 
 Ahora debemos instalar Amplify, para eso debemos utilizar las librerias propias de AWS Amplify y AWS Amplify React para los componentes especificos de IU:
 
@@ -47,16 +63,11 @@ Ahora creamos el proyecto Amplify
 ~ amplify init
 ```
 
-> 1. Ingresamos el nombre del proyecto.
-> 2. Ingresamos el ambiente (dev).
-> 3. Nuestro IDE preferido (default).
-> 4. Tipo de apliacion (JavaScript).
-> 5. Framework de JavaScript (React).
-> 6. Directorio del codigo fuente (src).
-> 7. Directorio donde estara el codigo final (build).
-> 8. Especificar el comando para compilar (npm run-script build).
-> 9. Comando para iniciar (npm run-script start).
-> 10. Eleccion del perfil de AWS (Y) y elegimos el que creamos previamente.
+Luego seleccionamos las siguientes opciones:
+
+<img src="../1-introduccion_amplify_cli/images/2021-12-18-22-31-07.png">
+
+<br>
 
 ## 3) Creando y desplegando el primer servicio
 
@@ -64,17 +75,18 @@ Ahora creamos el proyecto Amplify
 ~ amplify add auth
 ```
 
-> 1. Configuracion de autenticacion y seguridad (default).
-> 2. Como queremos que se logeen los usuarios (Username).
-> 3. Configurar opciones avanzadas (No, I am done).
+<img src="../1-introduccion_amplify_cli/images/2021-12-18-23-08-21.png">
+
+<br>
 
 Para desplegar el servicio de autenticacion ejecutamos lo siguiente:
 
 ```
 ~ amplify push
 ```
+<img src="../1-introduccion_amplify_cli/images/2021-12-18-23-15-19.png">
 
-Seleccionamos (Y).
+Seleccionamos (Y) y `podemos irnos a tomar un cafecito mientras se despliega todo...`
 
 En el archivo *src/index.js* agregamos lo siguiente:
 
@@ -87,17 +99,24 @@ Amplify.configure(config)
 luego reemplazamos el codigo en *src/App.js* con lo siguiente:
 
 ```javascript
-import React from 'react'
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
-        function App() {
-            return (
-                 <div>
-                 <h1>Hola Unifaydesde AWS Amplify!<h1>
-                    <AmplifySignOut >
-                </div>
-                )
+import { Amplify } from 'aws-amplify';
+import { Authenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import awsExports from './aws-exports';
+Amplify.configure(awsExports);
+
+export default function App() {
+  return (
+    <Authenticator>
+      {({ signOut, user }) => (
+        <main>
+          <h1>Hello {user.username}</h1>
+          <button onClick={signOut}>Sign out</button>
+        </main>
+      )}
+    </Authenticator>
+  );
 }
-export default withAuthenticator(App)
 ```
 
 Luego iniciamos la aplicacion
@@ -108,7 +127,13 @@ Luego iniciamos la aplicacion
 
 Al iniciar todo deberiamos ver una pantalla como la siguiente:
 
-<img src="../1-introduccion_amplify_cli/images/2021-12-01_22-13-04.png">
+<img src="../1-introduccion_amplify_cli/images/2021-12-19-00-23-27.png">
+
+Una vez se ingresa deberiamos ver algo como lo siguiente pero con el nombre del usuario que se registro previamente:
+
+<img src="../1-introduccion_amplify_cli/images/2021-12-19-00-35-21.png">
+
+<br>
 
 ## 4) Eliminando todos los recursos creados
 
@@ -122,6 +147,9 @@ Si queremos eliminar todo el proyecto Amplify ejecutamos lo siguiente:
 ~ amplify delete
 ```
 
+<br>
 
+> ### Referencias bibliograficas
+>> https://ui.docs.amplify.aws/components/authenticator
 
 
